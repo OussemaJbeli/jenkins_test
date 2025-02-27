@@ -1,21 +1,22 @@
 pipeline {
     agent any
 
-    environment {
-        GIT_USERNAME = credentials('github-token')
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                bat 'git config --global user.name "OussemaJbeli"'
-                bat 'git config --global user.email "jbelioussema33@gmail.com"'
-                bat '''
-                    git clone https://%GIT_USERNAME%@github.com/OussemaJbeli/boon_frent.git
-                '''
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    extensions: [],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/OussemaJbeli/boon_frent.git',
+                        credentialsId: 'github-token'
+                    ]]
+                ])
             }
         }
 
+        // Rest of your stages remain unchanged
         stage('Install Dependencies') {
             steps {
                 bat 'npm install'
