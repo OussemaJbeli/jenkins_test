@@ -20,10 +20,15 @@ pipeline {
             }
         }
 
-        // Rest of your stages remain unchanged
         stage('Install Dependencies') {
             steps {
                 bat 'npm install'
+            }
+        }
+
+        stage('Unit Tests') {
+            steps {
+                bat 'npm test' // Runs Jest tests
             }
         }
 
