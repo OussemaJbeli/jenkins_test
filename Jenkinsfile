@@ -8,24 +8,23 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-                    powershell 'git config --global credential.helper store'
-                    powershell 'git config --global user.name "OussemaJbeli"'
-                    powershell 'git config --global user.email "jbelioussema33@gmail.com"'
-                    powershell "git clone https://${GIT_USERNAME}@github.com/OussemaJbeli/boon_frent.git"
-                }
+                bat 'git config --global user.name "OussemaJbeli"'
+                bat 'git config --global user.email "jbelioussema33@gmail.com"'
+                bat '''
+                    git clone https://%GIT_USERNAME%@github.com/OussemaJbeli/boon_frent.git
+                '''
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                powershell 'npm install'
+                bat 'npm install'
             }
         }
 
         stage('Build') {
             steps {
-                powershell 'npm run build'
+                bat 'npm run build'
             }
         }
     }
