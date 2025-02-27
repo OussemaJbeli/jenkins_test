@@ -12,7 +12,7 @@ pipeline {
                     powershell 'git config --global credential.helper store'
                     powershell 'git config --global user.name "OussemaJbeli"'
                     powershell 'git config --global user.email "jbelioussema33@gmail.com"'
-                    powershell 'git clone https://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@github.com/OussemaJbeli/boon_frent.git'
+                    powershell "git clone https://${GIT_USERNAME}@github.com/OussemaJbeli/boon_frent.git"
                 }
             }
         }
