@@ -1,29 +1,31 @@
 pipeline {
     agent any
 
+    environment {
+        GIT_USERNAME = credentials('github-token')
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                checkout scmGit(branches: 
-                    [[name: '*/main']], 
-                    extensions: [], 
-                    userRemoteConfigs: [[
-                        credentialsId: 'github-token', 
-                        url: 'https://github.com/OussemaJbeli/boon_frent.git'
-                    ]]
-                )  
+                withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+                    powershell 'git config --global credential.helper store'
+                    powershell 'git config --global user.name "OussemaJbeli"'
+                    powershell 'git config --global user.email "jbelioussema33@gmail.com"'
+                    powershell 'git clone https://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@github.com/OussemaJbeli/boon_frent.git'
+                }
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                powershell 'npm install'
             }
         }
 
         stage('Build') {
             steps {
-                sh 'npm run build'
+                powershell 'npm run build'
             }
         }
     }
