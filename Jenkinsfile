@@ -17,14 +17,25 @@ pipeline {
                 bat 'npm install'
             }
         }
-        stage('Unit Tests') {
-            steps {
-                bat 'npm test' // Runs Jest tests
-            }
-        }
         stage('Build') {
             steps {
                 bat 'npm run build'
+            }
+        }
+        stage('Checkout Selenium Tests') {
+            steps {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    extensions: [],
+                    userRemoteConfigs: [[ url: 'https://github.com/OussemaJbeli/py_unit_test.git', credentialsId: 'github-token' ]]
+                ])
+            }
+        }
+        stage('Test with Selenium') {
+            steps {
+                bat 'pip install -r requirements.txt' // Install dependencies
+                bat 'python test.py' // Run Selenium test script
             }
         }
     }
